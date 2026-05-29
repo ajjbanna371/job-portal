@@ -1,6 +1,14 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
+@import "shadcn/tailwind.css"; 
+/* @plugin “@tailwindcss/typography”; */
+@plugin "@tailwindcss/typography";
+
+
+/*  we are using it for uploadThings  */
+@import "uploadthing/tw/v4";
+@source "../../node_modules/@uploadthing/react/dist"; /** <-- depends on your project structure */
+
 
 @custom-variant dark (&:is(.dark *));
 
@@ -56,6 +64,7 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(0.205 0 0);
+  /* --primary:  oklch(0.488 0.243 264.376); */
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);

@@ -1,0 +1,37 @@
+// npm i zod        Installation command for Zod library
+
+import { z } from "zod";
+export const registerUserSchema = z.object({
+    name: z.string().trim().min(2, "Name must be at least 2 characters").max(255, "Name must be less than 255 characters"),
+    username: z.string().trim().min(3, "Username must be at least 3 characters").max(255, "Username must be less than 255 characters").regex(/^[a-zA-Z0-9_-]+$/, "Username can only contain letters, numbers, underscores, and hyphens"),
+    email: z.email("Please enter a valid email address").trim().max(255, "Email must be less than 255 characters").toLowerCase(),
+    password: z.string().min(8, "Password must be at least 8 characters").regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, "Password must contain at least one uppercase letter, one lowercase letter, and one number"),
+    role: z.enum(["applicant", "employer"], {error : "Role must be either 'applicant' or 'employer'",})
+    .default("applicant"),
+    
+});
+
+// z.infer automatically creates a TypeScript type from your Zod schema
+export type RegisterUserData = z.infer<typeof registerUserSchema>;
+
+//optional: create a schema with password confirmation - in server we don't need confPass
+export const registerUserWithConfirmSchema = registerUserSchema.extend({
+    confirmPassword: z.string(),
+})
+
+.refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+});
+
+export type RegisterUserWithConfirmData = z.infer<typeof registerUserWithConfirmSchema>;
+
+
+
+// login schema
+export const loginUserSchema = z.object({
+    email: z.email("Please enter a valid email address").trim().max(255, "Email must be less than 255 characters").toLowerCase(),
+    password: z.string().min(8, "Password must be at least 8 characters").regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, "Password must contain at least one uppercase letter, one lowercase letter, and one number"),
+});
+
+export type LoginUserData = z.infer<typeof loginUserSchema>;    
